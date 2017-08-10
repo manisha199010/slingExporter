@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0" immediate="true" name="com.ttn.slingexporter.servlets.PageDataComposerServlet">
+    <property name="sling.servlet.resourceTypes" value="sling/servlet/default"/>
+    <property name="sling.servlet.selectors" value="compose"/>
+    <property name="sling.servlet.extensions" value="json"/>
+    <property name="sling.servlet.methods" value="GET"/>
+    <service servicefactory="false">
+        <provide interface="javax.servlet.Servlet"/>
+        <provide interface="javax.servlet.ServletConfig"/>
+        <provide interface="java.io.Serializable"/>
+    </service>
+    <reference name="pageDataComposeService" interface="com.ttn.slingexporter.service.PageDataComposeService" cardinality="1..1" policy="static" bind="bindPageDataComposeService" unbind="unbindPageDataComposeService"/>
+    <implementation class="com.ttn.slingexporter.servlets.PageDataComposerServlet"/>
+</scr:component>

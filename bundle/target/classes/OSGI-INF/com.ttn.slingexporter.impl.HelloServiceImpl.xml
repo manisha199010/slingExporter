@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0" name="com.ttn.slingexporter.impl.HelloServiceImpl">
+    <service servicefactory="false">
+        <provide interface="com.ttn.slingexporter.HelloService"/>
+    </service>
+    <reference name="repository" interface="org.apache.sling.jcr.api.SlingRepository" cardinality="1..1" policy="static" bind="bindRepository" unbind="unbindRepository"/>
+    <implementation class="com.ttn.slingexporter.impl.HelloServiceImpl"/>
+</scr:component>

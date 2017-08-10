@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0" immediate="true" name="com.ttn.slingexporter.impl.filters.LoggingFilter">
+    <property name="service.ranking" type="Integer" value="-700"/>
+    <property name="sling.filter.scope" value="REQUEST"/>
+    <service servicefactory="false">
+        <provide interface="javax.servlet.Filter"/>
+    </service>
+    <implementation class="com.ttn.slingexporter.impl.filters.LoggingFilter"/>
+</scr:component>
