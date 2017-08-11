@@ -24,6 +24,7 @@ import java.util.*;
 @Property(name = "template.path", label = "Templates paths", description = "The template path for translation", value = {
         "invest-india/components/page/one-column-page=col-1",
         "invest-india/components/page/two-column-page=col-1;col-2",
+        "invest-india/components/page/blogpage=blogcomponent",
         "foundation/components/table=tableData"
 }, cardinality = Integer.MAX_VALUE)
 
@@ -34,7 +35,7 @@ public class PageDataComposeServiceImpl implements PageDataComposeService {
 
     Map<String, List<String>> validPropertiesMap = new HashMap<String, List<String>>();
 
-    public static final String BLOG_TEMPLATE = "";
+    public static final String BLOG_COMPONENT_NODE = "invest-india/components/content/blogcomponent";
 
     @Activate
     protected void activate(ComponentContext componentContext) throws Exception {
@@ -62,9 +63,10 @@ public class PageDataComposeServiceImpl implements PageDataComposeService {
 
     JSONArray jsonArray = new JSONArray();
 
-    JSONObject page = new JSONObject();
+    JSONObject page;
 
     public JSONObject composePageData(ResourceResolver resourceResolver, String resourcePath) throws JSONException {
+        page = new JSONObject();
         Resource resource = resourceResolver.resolve(resourcePath);
         JSONArray contentList = new JSONArray();
 
@@ -79,13 +81,18 @@ public class PageDataComposeServiceImpl implements PageDataComposeService {
                 for (String parsysNode : parsysNodes) {     // for col nodes
                     Resource colChild = resource.getChild(parsysNode);
                     if (colChild != null) {
+                        if (BLOG_COMPONENT_NODE.equals(colChild.getResourceType())) {
+                            page.put("blogDetail", addComponents(colChild, new JSONObject()));
+                            colChild  = colChild.getChild("blogparsys");
+                        }
                         Iterator<Resource> children = colChild.listChildren();
-
                         while (children.hasNext()) {            // list of resources in col parsys
-                            contentList = composeComponentData(children.next(), resource, new JSONObject());
+                            JSONObject jsonObject = composeComponentData(children.next(), resource, new JSONObject());
+                            if (jsonObject.length() > 0) {
+                                contentList.put(jsonObject);
+                            }
                         }
                     }
-
                 }
                 page.put("content", contentList);
             }
@@ -93,33 +100,31 @@ public class PageDataComposeServiceImpl implements PageDataComposeService {
         return page;
     }
 
-    private JSONArray composeComponentData(Resource child, Resource resource, JSONObject jsonObject) throws JSONException {
-        JSONArray contentList = new JSONArray();
+    private JSONObject composeComponentData(Resource child, Resource resource, JSONObject jsonObject) throws JSONException {
+        JSONObject content = new JSONObject();
+        JSONArray conArray = new JSONArray();
         switch (child.getValueMap().get("sling:resourceType", String.class)) {
             case ComponentPropertiesService.BLOG_LIST_COMPONENT:
                 Iterator<Resource> blogResourceItr = resource.getParent().listChildren();
                 while (blogResourceItr.hasNext()) {
                     Resource blogResource = blogResourceItr.next();
-                    JSONObject content = new JSONObject();
+                    JSONObject con = new JSONObject();
                     if (blogResource.getValueMap().get(JcrConstants.JCR_PRIMARYTYPE, String.class).equals("cq:Page")) {
                         Resource blogCompRes = blogResource.getChild("jcr:content/blogcomponent");
                         if (blogCompRes != null) {
-                            content = addComponents(blogCompRes, content);
+                            con = addComponents(blogCompRes, con);
                         }
                     }
-                    if (content.length() > 0) {
-                        contentList.put(content);
+                    if (con.length() > 0) {
+                        conArray.put(con);
                     }
                 }
+                content.put("blog-components", conArray);
                 break;
             default:
-                JSONObject content = addComponents(child, new JSONObject());
-                if (content.length() > 0) {
-                    contentList.put(content);
-                }
-
+                content = addComponents(child, new JSONObject());
         }
-        return contentList;
+        return content;
     }
 
     private JSONObject addComponents(Resource r, JSONObject content) throws JSONException {
@@ -136,6 +141,15 @@ public class PageDataComposeServiceImpl implements PageDataComposeService {
                     processData(r.getPath() + "jcr:content.compose.json", p, node);
                 }
 
+            }
+            if(propertiesMap.containsKey("text")) {
+                node.put("type", "text");
+            } else if(propertiesMap.containsKey("fileReference")) {
+                node.put("type", "image");
+            } else if(propertiesMap.containsKey("blogTitle")) {
+                node.put("type", "blogComponent");
+            } else if(propertiesMap.containsKey("asset")) {
+                node.put("type", "video");
             }
             //content.put(r.getName(), node);
         }

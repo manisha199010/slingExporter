@@ -4,7 +4,7 @@
 <comment>Sling Exporter Package</comment>
 <entry key="createdBy">manisha</entry>
 <entry key="name">slingexporter-content</entry>
-<entry key="created">2017-08-10T17:12:45.640+0530</entry>
+<entry key="created">2017-08-11T14:36:03.195+0530</entry>
 <entry key="groupId">com.ttn.sling</entry>
 <entry key="version">1.0-SNAPSHOT</entry>
 <entry key="requiresRoot">false</entry>

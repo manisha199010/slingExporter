@@ -3,6 +3,7 @@
     <property name="template.path">
         invest-india/components/page/one-column-page=col-1
         invest-india/components/page/two-column-page=col-1;col-2
+        invest-india/components/page/blogpage=blogcomponent
         foundation/components/table=tableData
     </property>
     <service servicefactory="false">
