@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0" immediate="true" name="com.ttn.slingexporter.service.impl.PageComponentProcessorServiceImpl">
-    <service servicefactory="false">
-        <provide interface="com.ttn.slingexporter.service.PageComponentProcessorService"/>
-    </service>
-    <reference name="headlessComponentJsonWriterService" interface="com.ttn.slingexporter.service.HeadlessComponentJsonWriterService" cardinality="1..1" policy="static" bind="bindHeadlessComponentJsonWriterService" unbind="unbindHeadlessComponentJsonWriterService"/>
-    <implementation class="com.ttn.slingexporter.service.impl.PageComponentProcessorServiceImpl"/>
-</scr:component>

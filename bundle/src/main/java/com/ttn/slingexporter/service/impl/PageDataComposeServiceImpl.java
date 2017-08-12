@@ -169,6 +169,7 @@ public class PageDataComposeServiceImpl implements PageDataComposeService {
                 String text = link.text();
                 linkObj.put("text", text);
                 linkObj.put("href", href);
+                linkObj.put("index", data.indexOf(text));
                 linkArr.put(linkObj);
             }
             if (linkArr.length() > 0) {
@@ -192,6 +193,7 @@ public class PageDataComposeServiceImpl implements PageDataComposeService {
                         String text = link.text();
                         linkObj.put("text", text);
                         linkObj.put("href", href);
+                        linkObj.put("index", col.toString().indexOf(text));
                         linkArr.put(linkObj);
                     }
                     column.put("text", col.text());
