@@ -163,13 +163,22 @@ public class PageDataComposeServiceImpl implements PageDataComposeService {
             data = data.replaceAll("\\<.*?>", "");
             node.put(type, data);
             JSONArray linkArr = new JSONArray();
+            Map<String,Integer> textIndex = new HashMap<>();
+            int index = 0;
             for (Element link : links) {
                 JSONObject linkObj = new JSONObject();
                 String href = link.attr("href");
                 String text = link.text();
                 linkObj.put("text", text);
                 linkObj.put("href", href);
-                linkObj.put("index", data.indexOf(text));
+                if(textIndex.containsKey(text)){
+                    index = data.indexOf(text,textIndex.get(text) + text.length());
+                }else{
+                    index = data.indexOf(text);
+                }
+                textIndex.put(text,index);
+                linkObj.put("index", index);
+                
                 linkArr.put(linkObj);
             }
             if (linkArr.length() > 0) {
@@ -180,6 +189,8 @@ public class PageDataComposeServiceImpl implements PageDataComposeService {
             Document doc = Jsoup.parse(data);
             Elements rows = doc.getElementsByTag("tr");
             JSONArray rowArray = new JSONArray();
+            Map<String,Integer> textIndex = new HashMap<>();
+            int index = 0;
             for (Element row : rows) {
                 Elements cols = row.getElementsByTag("td");
                 JSONArray colArray = new JSONArray();
@@ -193,7 +204,13 @@ public class PageDataComposeServiceImpl implements PageDataComposeService {
                         String text = link.text();
                         linkObj.put("text", text);
                         linkObj.put("href", href);
-                        linkObj.put("index", col.toString().indexOf(text));
+                        if(textIndex.containsKey(text)){
+                            index = col.toString().indexOf(text, textIndex.get(text) + text.length());
+                        }else{
+                            index = col.toString().indexOf(text);
+                        }
+                        linkObj.put("index", index);
+                        textIndex.put(text,index);
                         linkArr.put(linkObj);
                     }
                     column.put("text", col.text());

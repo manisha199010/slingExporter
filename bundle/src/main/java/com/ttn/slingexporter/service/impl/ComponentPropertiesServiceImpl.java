@@ -16,6 +16,7 @@ import java.util.*;
         "foundation/components/text=text;textIsRich",
         "foundation/components/textimage=text",
         "foundation/components/image=fileReference;alt;jcr:title;jcr:description;width;height",
+        "invest-india/components/content/image=fileReference;alt;jcr:title;jcr:description;width;height",
         "foundation/components/video=asset;width;height",
         "foundation/components/title=jcr:title;size",
         "foundation/components/search=jcr:title;searchIn",
